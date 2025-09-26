@@ -1,0 +1,249 @@
+{
+  "version": "2.1.0",
+  "summary": {
+    "title": "Web-based User Feedback System (SAFECode Figure 2)",
+    "owner": "Kailu",
+    "reviewer": "Threat Model",
+    "description": "Recreated DFD from SAFECode Tactical Threat Modeling \u2013 Web-based user feedback system."
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "id": "diagram-1",
+        "title": "DFD \u2013 Simple Web App",
+        "diagramType": "STRIDE",
+        "cells": [
+          {
+            "type": "tm.ExternalEntity",
+            "id": "ext-browser",
+            "position": {
+              "x": 80,
+              "y": 240
+            },
+            "size": {
+              "width": 160,
+              "height": 90
+            },
+            "attrs": {
+              "text": {
+                "text": "Browser Client\n(User)"
+              }
+            },
+            "z": 1
+          },
+          {
+            "type": "tm.Process",
+            "id": "proc-webapp",
+            "position": {
+              "x": 400,
+              "y": 230
+            },
+            "size": {
+              "width": 160,
+              "height": 110
+            },
+            "attrs": {
+              "text": {
+                "text": "Web Application\n(P1)"
+              }
+            },
+            "z": 2
+          },
+          {
+            "type": "tm.Store",
+            "id": "store-sql",
+            "position": {
+              "x": 680,
+              "y": 120
+            },
+            "size": {
+              "width": 200,
+              "height": 90
+            },
+            "attrs": {
+              "text": {
+                "text": "SQL Database\n(D1)"
+              }
+            },
+            "z": 2
+          },
+          {
+            "type": "tm.Store",
+            "id": "store-ldap",
+            "position": {
+              "x": 680,
+              "y": 320
+            },
+            "size": {
+              "width": 200,
+              "height": 90
+            },
+            "attrs": {
+              "text": {
+                "text": "LDAP Directory\n(D2)"
+              }
+            },
+            "z": 2
+          },
+          {
+            "type": "tm.Boundary",
+            "id": "boundary-client",
+            "position": {
+              "x": 40,
+              "y": 200
+            },
+            "size": {
+              "width": 240,
+              "height": 160
+            },
+            "attrs": {
+              "label": {
+                "text": "Client Zone"
+              }
+            },
+            "z": 0
+          },
+          {
+            "type": "tm.Boundary",
+            "id": "boundary-app",
+            "position": {
+              "x": 360,
+              "y": 80
+            },
+            "size": {
+              "width": 560,
+              "height": 380
+            },
+            "attrs": {
+              "label": {
+                "text": "Application & Data Zone"
+              }
+            },
+            "z": 0
+          },
+          {
+            "type": "tm.Flow",
+            "id": "flow-login-req",
+            "source": {
+              "id": "ext-browser"
+            },
+            "target": {
+              "id": "proc-webapp"
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "text": {
+                    "text": "1a. Register/Login (HTTPS)"
+                  }
+                }
+              }
+            ],
+            "z": 3
+          },
+          {
+            "type": "tm.Flow",
+            "id": "flow-http-resp",
+            "source": {
+              "id": "proc-webapp"
+            },
+            "target": {
+              "id": "ext-browser"
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "text": {
+                    "text": "1b. Responses/Pages"
+                  }
+                }
+              }
+            ],
+            "z": 3
+          },
+          {
+            "type": "tm.Flow",
+            "id": "flow-ldap-auth",
+            "source": {
+              "id": "proc-webapp"
+            },
+            "target": {
+              "id": "store-ldap"
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "text": {
+                    "text": "2a. Authenticate (LDAP query)"
+                  }
+                }
+              }
+            ],
+            "z": 3
+          },
+          {
+            "type": "tm.Flow",
+            "id": "flow-ldap-res",
+            "source": {
+              "id": "store-ldap"
+            },
+            "target": {
+              "id": "proc-webapp"
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "text": {
+                    "text": "2b. Auth result"
+                  }
+                }
+              }
+            ],
+            "z": 3
+          },
+          {
+            "type": "tm.Flow",
+            "id": "flow-insert",
+            "source": {
+              "id": "proc-webapp"
+            },
+            "target": {
+              "id": "store-sql"
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "text": {
+                    "text": "3a. Write feedback (INSERT)"
+                  }
+                }
+              }
+            ],
+            "z": 3
+          },
+          {
+            "type": "tm.Flow",
+            "id": "flow-select",
+            "source": {
+              "id": "store-sql"
+            },
+            "target": {
+              "id": "proc-webapp"
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "text": {
+                    "text": "3b. Read feedback (SELECT)"
+                  }
+                }
+              }
+            ],
+            "z": 3
+          }
+        ]
+      }
+    ]
+  }
+}
